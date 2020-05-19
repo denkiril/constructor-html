@@ -1,0 +1,21 @@
+.open {
+    margin-right: 10px;
+}
+
+.search-block {
+    display: flex;
+    margin-bottom: 1rem;
+
+    input {
+        padding: 0.4rem;
+        font-size: 1rem;
+        border: 1px solid #ccc;
+    }
+
+    button {
+        padding: 0.4rem;
+        font-size: 1rem;
+        width: auto;
+        margin-left: 4px;
+    }
+}

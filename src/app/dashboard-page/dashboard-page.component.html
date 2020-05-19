@@ -1,0 +1,50 @@
+<div *ngIf="!loading; else loadingTemplate">
+    <form [formGroup]="form" (ngSubmit)="submit()">
+        <div class="search-block">
+            <input type="search" placeholder="Найти сайт..." formControlName="search" />
+            <button type="submit" class="btn btn-block btn-dark" [disabled]="form.invalid">Искать</button>
+        </div>
+    </form>
+
+    <div *ngIf="searchStr">
+        <h2>
+            <ng-container *ngIf="sites.length; else noResults">
+                Результаты поиска "{{searchStr}}"
+            </ng-container>
+            <ng-template #noResults>
+                Поиск "{{searchStr}}" не дал результатов.
+            </ng-template>
+        </h2>
+    </div>
+
+    <table *ngIf="sites.length">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Название</th>
+                <th>Описание</th>
+                <th>Текст (body)</th>
+                <th>Дата создания</th>
+                <th>Дата изменения</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let site of sites | filterSites:form.get('search').value; let idx = index">
+                <td>{{idx + 1}}</td>
+                <td>{{site.title}}</td>
+                <td>{{site.siteDescription}}</td>
+                <td>{{site.body}}</td>
+                <td>{{site.createDate | date:'medium':null:'ru'}}</td>
+                <td>{{site.updateDate | date:'medium':null:'ru'}}</td>
+                <td>
+                    <p>Controls</p>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<ng-template #loadingTemplate>
+    <p class="text-center">Идёт загрузка...</p>
+</ng-template>
