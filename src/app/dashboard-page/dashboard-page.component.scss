@@ -17,5 +17,24 @@
         font-size: 1rem;
         width: auto;
         margin-left: 4px;
+        margin-right: 0;
     }
+}
+
+table {
+    margin-bottom: 2rem;
+}
+
+.flex {
+    display: flex;
+}
+
+.pagination {
+    border: 1px solid grey;
+    padding: 3px;
+    margin-left: auto;
+}
+
+.page-numbers {
+    padding: 0 10px;
 }

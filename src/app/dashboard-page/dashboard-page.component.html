@@ -43,6 +43,27 @@
             </tr>
         </tbody>
     </table>
+
+    <div *ngIf="pageIndex > 1 || pageIndex < pageIndexMax" class="flex">
+        <div class="pagination">
+            <a 
+                *ngIf="pageIndex > 1" 
+                [routerLink]="[]" [queryParams]="{s: searchStr, p: (pageIndex - 1 > 1 ? pageIndex - 1 : null)}"
+                class="prev page-numbers">&lt;&lt;</a>
+            <a *ngIf="pageIndex > 1" class="page-numbers" [routerLink]="[]">1</a>
+            <span *ngIf="pageIndex - 1 > 1" class="page-numbers dots">…</span>
+            <span class="page-numbers current">{{pageIndex}}</span>
+            <span *ngIf="pageIndex + 1 < pageIndexMax" class="page-numbers dots">…</span>
+            <a 
+                *ngIf="pageIndex < pageIndexMax" 
+                [routerLink]="[]" [queryParams]="{s: searchStr, p: pageIndexMax}"
+                class="page-numbers">{{pageIndexMax}}</a>
+            <a 
+                *ngIf="pageIndex < pageIndexMax" 
+                [routerLink]="[]" [queryParams]="{s: searchStr, p: pageIndex + 1}"
+                class="next page-numbers">&gt;&gt;</a>
+        </div>
+    </div>
 </div>
 
 <ng-template #loadingTemplate>

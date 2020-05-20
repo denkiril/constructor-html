@@ -21,6 +21,23 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
   form: FormGroup;
   searchStr = '';
   loading = true;
+  pageSize = 3;
+  pageIndex = 1;
+  pageIndexMax = 1;
+
+  // private initSites(sites: Site[], pageParam: string): void {
+  //   const pageIndex = Number(pageParam);
+  //   this.pageIndex = (sites.length > this.pageSize && pageIndex) ? pageIndex : 1;
+  //   this.pageIndexMax = Math.ceil(sites.length / this.pageSize);
+
+  //   const start = (this.pageIndex - 1) * this.pageSize;
+  //   this.sites = sites.slice(start, start + this.pageSize);
+  //   this.loading = false;
+
+  //   console.log('sites.length:', this.sites.length);
+  //   console.log('pageIndex:', this.pageIndex);
+  //   console.log('pageIndexMax:', this.pageIndexMax);
+  // }
 
   constructor(
     private sitesService: SitesService,
@@ -32,19 +49,15 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
     this.route.queryParams.subscribe((params: Params) => {
       console.log('params: ', params);
       this.searchStr = params['s'];
-      if (this.searchStr) {
-        this.sSub = this.sitesService.searchSites(this.searchStr).subscribe(sites => {
-          this.sites = sites;
-          this.loading = false;
-          console.log('searchSites. loading = false. sites.l=', sites.length);
-        });
-      } else {
-        this.gSub = this.sitesService.getAll().subscribe(sites => {
-          this.sites = sites;
-          this.loading = false;
-          console.log('getAll. loading = false. sites.l=', sites.length);
-        });
-      }
+
+      this.sitesService.getSites(params['p'], this.pageSize, this.searchStr).subscribe(resp => {
+        console.log(resp);
+        this.sites = resp.sites;
+        this.pageIndex = resp.pageIndex;
+        this.pageIndexMax = Math.ceil(resp.sitesLen / this.pageSize);
+
+        this.loading = false;
+      });
     })
 
     this.form = new FormGroup({

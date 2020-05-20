@@ -6,3 +6,9 @@ export interface Site {
     createDate: Date,
     updateDate: Date,
 }
+
+export interface SitesResponse {
+    sites: Site[],
+    sitesLen: number,
+    pageIndex: number,
+}
