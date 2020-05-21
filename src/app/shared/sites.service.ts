@@ -10,8 +10,12 @@ import { Site, SitesResponse } from './interfaces';
   providedIn: 'root'
 })
 export class SitesService {
-
+  
   private sitesUrl = 'api/sites';  // URL to web api
+
+  httpOptions = {
+    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+  };
 
   constructor(
     private http: HttpClient
@@ -89,5 +93,37 @@ export class SitesService {
     //   lenght: 0,
     //   pageIndex: 1,
     // });
+  }
+
+  /** POST: add a new site to the server */
+  addSite(site: Site): Observable<Site> {
+    return this.http.post<Site>(this.sitesUrl, site, this.httpOptions).pipe(
+      tap((newSite: Site) => console.log(`added site w/ id=${newSite.id}`)),
+      catchError(this.handleError<Site>('addSite'))
+    );
+  }
+
+  /** GET hero by id. Will 404 if id not found */
+  getById(id: number): Observable<Site> {
+    const url = `${this.sitesUrl}/${id}`;
+
+    return this.http.get<Site>(url).pipe(
+      tap(_ => console.log(`fetched site id=${id}`)),
+      map((site: Site) => {
+        return {
+          ...site,
+          createDate: new Date(site.createDate),
+        }
+      }),
+      catchError(this.handleError<Site>(`getById id=${id}`))
+    );
+  }
+
+  /** PUT: update the site on the server */
+  update(site: Site): Observable<any> {
+    return this.http.put(this.sitesUrl, site, this.httpOptions).pipe(
+      tap(_ => console.log(`updated site id=${site.id}`)),
+      catchError(this.handleError<any>('update'))
+    );
   }
 }

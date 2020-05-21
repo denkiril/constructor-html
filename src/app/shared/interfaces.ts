@@ -1,10 +1,10 @@
 export interface Site {
-    id?: string,
+    id: number,
     title: string,
-    siteDescription: string,
+    siteDescription?: string,
     body: string,
     createDate: Date,
-    updateDate: Date,
+    updateDate?: Date,
 }
 
 export interface SitesResponse {

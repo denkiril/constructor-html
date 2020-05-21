@@ -1,0 +1,49 @@
+<div *ngIf="form; else loadingTemplate">
+    <form [formGroup]="form" (ngSubmit)="submit()">
+        <h1>Редактирование сайта</h1>
+
+        <div 
+            [ngClass]="{invalid: form.get('title').touched && form.get('title').invalid}"
+            class="form-control">
+            <label for="title">Название сайта:</label>
+            <input type="text" id="title" formControlName="title">
+            <div 
+                *ngIf="form.get('title').touched && form.get('title').invalid"
+                class="validation">
+                <small *ngIf="form.get('title').errors.required">
+                    Это поле должно быть заполнено
+                </small>
+            </div>
+        </div>
+
+        <div class="form-control">
+            <label for="siteDescription">Описание сайта:</label>
+            <input type="text" id="siteDescription" formControlName="siteDescription">
+        </div>
+
+        <div 
+            [ngClass]="{invalid: form.get('body').touched && form.get('body').invalid}"
+            class="form-control">
+            <label for="body">Контент сайта (body):</label>
+            <textarea id="body" rows="10" formControlName="body"></textarea>
+            <div 
+                *ngIf="form.get('body').touched && form.get('body').invalid"
+                class="validation">
+                <small *ngIf="form.get('body').errors.required">
+                    Это поле должно быть заполнено
+                </small>
+            </div>
+        </div>
+
+        <button
+            type="submit"
+            class="btn btn-primary"
+            [disabled]="!changed() || form.invalid || submitted">
+            Обновить сайт
+        </button>
+    </form>
+</div>
+
+<ng-template #loadingTemplate>
+    <p class="text-center">Сайт загружается...</p>
+</ng-template>

@@ -38,7 +38,11 @@
                 <td>{{site.createDate | date:'medium':null:'ru'}}</td>
                 <td>{{site.updateDate | date:'medium':null:'ru'}}</td>
                 <td>
-                    <p>Controls</p>
+                    <button 
+                        class="btn btn-link open"
+                        [routerLink]="['/site', site.id, 'edit']">
+                        Открыть
+                    </button>
                 </td>
             </tr>
         </tbody>

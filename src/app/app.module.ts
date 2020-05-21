@@ -12,6 +12,8 @@ import { AppComponent } from './app.component';
 import { DashboardPageComponent } from './dashboard-page/dashboard-page.component';
 import { FilterPipe } from './shared/filter.pipe';
 import { AppRoutingModule } from './app-routing.module';
+import { CreatePageComponent } from './create-page/create-page.component';
+import { EditPageComponent } from './edit-page/edit-page.component';
 
 registerLocaleData(ruLocale, 'ru');
 
@@ -20,6 +22,8 @@ registerLocaleData(ruLocale, 'ru');
     AppComponent,
     DashboardPageComponent,
     FilterPipe,
+    CreatePageComponent,
+    EditPageComponent,
   ],
   imports: [
     BrowserModule,
