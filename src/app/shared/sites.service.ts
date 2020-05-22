@@ -123,7 +123,18 @@ export class SitesService {
   update(site: Site): Observable<any> {
     return this.http.put(this.sitesUrl, site, this.httpOptions).pipe(
       tap(_ => console.log(`updated site id=${site.id}`)),
-      catchError(this.handleError<any>('update'))
+      catchError(this.handleError<any>('update site'))
+    );
+  }
+
+  /** DELETE: delete the site from the server */
+  delete(site: Site | number): Observable<Site> {
+    const id = typeof site === 'number' ? site : site.id;
+    const url = `${this.sitesUrl}/${id}`;
+
+    return this.http.delete<Site>(url, this.httpOptions).pipe(
+      tap(_ => console.log(`deleted site id=${id}`)),
+      catchError(this.handleError<Site>('delete site'))
     );
   }
 }

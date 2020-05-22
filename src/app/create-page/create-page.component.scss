@@ -1,0 +1,17 @@
+form {
+    margin-bottom: 2rem;
+}
+
+.upload-btn {
+    cursor: pointer;
+    border-bottom: dotted 1px gray;
+}
+
+.upload-btn:hover {
+    color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+}
+
+#upload-input {
+    display: none;
+}

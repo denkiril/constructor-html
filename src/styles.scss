@@ -1,11 +1,12 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto');
 
 :root {
-  --primary-color: #dc3545;
+  --primary-color: #582d7c;
   --dark-color: #333333;
   --light-color: #f4f4f4;
   --danger-color: #dc3545;
   --success-color: #28a745;
+  --active-color: #f7ab3b;
 }
 
 * {
@@ -280,9 +281,9 @@ table th {
   }
 
   li.active a {
-    color: var(--dark-color);
+    color: var(--active-color);
     font-weight: bold;
-    cursor: default;
+    // cursor: default;
   }
 
   a {

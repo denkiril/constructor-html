@@ -39,9 +39,18 @@
                 <td>{{site.updateDate | date:'medium':null:'ru'}}</td>
                 <td>
                     <button 
-                        class="btn btn-link open"
+                        class="btn btn-link"
+                        title="Редактировать"
                         [routerLink]="['/site', site.id, 'edit']">
-                        Открыть
+                        <fa-icon [icon]="faEdit"></fa-icon>
+                    </button>
+                    <button (click)="remove(site.id)" class="btn btn-link hover-danger" title="Удалить">
+                        <fa-icon [icon]="faTrashAlt"></fa-icon>
+                    </button>
+                    <button
+                        (click)="downloadJson(site)"
+                        class="btn btn-link" title="Экспортировать">
+                        <fa-icon [icon]="faFileExport"></fa-icon>
                     </button>
                 </td>
             </tr>

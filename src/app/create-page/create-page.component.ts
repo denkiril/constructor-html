@@ -12,6 +12,7 @@ import { SitesService } from '../shared/sites.service';
 export class CreatePageComponent implements OnInit {
 
   form: FormGroup;
+  createDate: Date;
 
   constructor(
     private sitesService: SitesService
@@ -32,7 +33,7 @@ export class CreatePageComponent implements OnInit {
       title: this.form.value.title,
       siteDescription: this.form.value.siteDescription,
       body: this.form.value.body,
-      createDate: new Date(),
+      createDate: this.createDate || new Date(),
     }
 
     console.log(newSite);
@@ -43,6 +44,20 @@ export class CreatePageComponent implements OnInit {
       // this.sites.push(site);
       // this.alert.success('Пост успешно создан.');
     })
+  }
+
+  handleFile(files: FileList): void {
+    const file = files.item(0);
+
+    file.text().then(text => {
+      console.log('handleFile', text);
+      const uploaded = JSON.parse(text);
+
+      if(uploaded.title) this.form.get('title').setValue(uploaded.title);
+      if(uploaded.siteDescription) this.form.get('siteDescription').setValue(uploaded.siteDescription);
+      if(uploaded.body) this.form.get('body').setValue(uploaded.body);
+      if(uploaded.createDate) this.createDate = new Date(uploaded.createDate);
+    });
   }
 
 }

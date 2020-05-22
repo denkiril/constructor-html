@@ -1,5 +1,9 @@
-.open {
-    margin-right: 10px;
+.btn+.btn {
+    margin-left: 10px;
+}
+
+.hover-danger:hover {
+    color: var(--danger-color);
 }
 
 .search-block {

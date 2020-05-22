@@ -1,7 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute, Params } from '@angular/router';
+import { DomSanitizer } from '@angular/platform-browser';
 import { Subscription } from 'rxjs';
+import { faEdit, faTrashAlt, faFileExport } from '@fortawesome/free-solid-svg-icons';
 
 import { Site } from '../shared/interfaces';
 import { SitesService } from '../shared/sites.service';
@@ -25,24 +27,15 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
   pageIndex = 1;
   pageIndexMax = 1;
 
-  // private initSites(sites: Site[], pageParam: string): void {
-  //   const pageIndex = Number(pageParam);
-  //   this.pageIndex = (sites.length > this.pageSize && pageIndex) ? pageIndex : 1;
-  //   this.pageIndexMax = Math.ceil(sites.length / this.pageSize);
-
-  //   const start = (this.pageIndex - 1) * this.pageSize;
-  //   this.sites = sites.slice(start, start + this.pageSize);
-  //   this.loading = false;
-
-  //   console.log('sites.length:', this.sites.length);
-  //   console.log('pageIndex:', this.pageIndex);
-  //   console.log('pageIndexMax:', this.pageIndexMax);
-  // }
+  faEdit = faEdit;
+  faTrashAlt = faTrashAlt;
+  faFileExport = faFileExport;
 
   constructor(
     private sitesService: SitesService,
     private router: Router,
     private route: ActivatedRoute,
+    private sanitizer: DomSanitizer
   ) { }
 
   ngOnInit(): void {
@@ -65,12 +58,6 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnDestroy() {
-    if (this.gSub) this.gSub.unsubscribe();
-    if (this.sSub) this.sSub.unsubscribe();
-    if (this.dSub) this.dSub.unsubscribe();
-  }
-
   submit() {
     if (this.form.invalid) return;
 
@@ -81,7 +68,52 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
       queryParams: {
           s: searchStr,
       }
-  });
+    });
+  }
+
+  remove(id: number) {
+    this.dSub = this.sitesService.delete(id).subscribe(() => {
+      this.sites = this.sites.filter(site => site.id !== id);
+    })
+  }
+
+  generateJsonUrl(site: Site) {
+    // Create a blob of the data
+    const blob = new Blob([JSON.stringify(site)], {
+      type: 'application/json'
+    });
+
+    // return this.sanitizer.bypassSecurityTrustUrl('data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(site)));
+    return this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(blob));
+  }
+
+  downloadJson(site: Site): void {
+    const fileName = 'site.json';
+
+    const blob = new Blob([JSON.stringify(site)], {
+      type: 'application/json'
+    });
+
+    // const isIE = window.navigator.userAgent.indexOf("MSIE ");
+    if (navigator.msSaveBlob) {
+      navigator.msSaveBlob(blob, fileName);
+      // navigator.msSaveOrOpenBlob(blob, fileName); ?
+    } else {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      // document.body.appendChild(a);
+      // a.style.display = 'none';
+      a.href = url;
+      a.download = fileName;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+  }
+
+  ngOnDestroy() {
+    if (this.gSub) this.gSub.unsubscribe();
+    if (this.sSub) this.sSub.unsubscribe();
+    if (this.dSub) this.dSub.unsubscribe();
   }
 
 }

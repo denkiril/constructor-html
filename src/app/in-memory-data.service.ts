@@ -18,7 +18,6 @@ export class InMemoryDataService implements InMemoryDbService {
         siteDescription: 'siteDescription 1',
         body: '<h1>Hello world!</h1>',
         createDate: new Date(),
-        updateDate: new Date(),
       },
       {
         id: 2,
@@ -26,7 +25,6 @@ export class InMemoryDataService implements InMemoryDbService {
         siteDescription: 'siteDescription 2',
         body: '<h1>Hello world again!!</h1>',
         createDate: new Date(),
-        updateDate: new Date(),
       },
       {
         id: 3,
@@ -34,7 +32,6 @@ export class InMemoryDataService implements InMemoryDbService {
         siteDescription: 'siteDescription 3',
         body: '<h1>Hello world again!!</h1>',
         createDate: new Date(),
-        updateDate: new Date(),
       },
       {
         id: 4,
@@ -42,7 +39,6 @@ export class InMemoryDataService implements InMemoryDbService {
         siteDescription: 'siteDescription 4',
         body: '<h1>Hello world again!!</h1>',
         createDate: new Date(),
-        updateDate: new Date(),
       },
       {
         id: 5,
@@ -50,7 +46,6 @@ export class InMemoryDataService implements InMemoryDbService {
         siteDescription: 'siteDescription 5',
         body: '<h1>Hello world again!!</h1>',
         createDate: new Date(),
-        updateDate: new Date(),
       },
     ];
 

@@ -40,4 +40,8 @@
         [disabled]="form.invalid">
         Создать
     </button>
+
 </form>
+
+<input type="file" id="upload-input" accept="application/JSON" (change)="handleFile($event.target.files)" /> 
+<label class="upload-btn" for="upload-input">Импортировать из файла (json)</label>
