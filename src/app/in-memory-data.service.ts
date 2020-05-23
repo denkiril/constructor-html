@@ -49,7 +49,14 @@ export class InMemoryDataService implements InMemoryDbService {
       },
     ];
 
-    return {sites};
+    const options = [
+      {
+        id: 'pageSize',
+        value: 3,
+      }
+    ];
+
+    return {sites, options};
   }
 
   // Overrides the genId method to ensure that a site always has an id.

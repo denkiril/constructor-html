@@ -3,11 +3,12 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { registerLocaleData } from '@angular/common';
 import ruLocale from '@angular/common/locales/ru';
-import { HttpClientModule }    from '@angular/common/http';
+// import { HttpClientModule }    from '@angular/common/http';
 
-import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
-import { InMemoryDataService }  from './in-memory-data.service';
+// import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
+// import { InMemoryDataService }  from './in-memory-data.service';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { NgxIndexedDBModule, DBConfig } from 'ngx-indexed-db';
 
 import { AppComponent } from './app.component';
 import { DashboardPageComponent } from './dashboard-page/dashboard-page.component';
@@ -15,8 +16,26 @@ import { FilterPipe } from './shared/filter.pipe';
 import { AppRoutingModule } from './app-routing.module';
 import { CreatePageComponent } from './create-page/create-page.component';
 import { EditPageComponent } from './edit-page/edit-page.component';
+import { OptionsPageComponent } from './options-page/options-page.component';
 
 registerLocaleData(ruLocale, 'ru');
+
+const dbConfig: DBConfig = {
+  name: 'chdb',
+  version: 1,
+  objectStoresMeta: [
+    {
+      store: 'sites',
+      storeConfig: { keyPath: 'id', autoIncrement: true },
+      storeSchema: [],
+    },
+    {
+      store: 'options',
+      storeConfig: { keyPath: 'id', autoIncrement: false },
+      storeSchema: [],
+    },
+  ]
+};
 
 @NgModule({
   declarations: [
@@ -25,20 +44,22 @@ registerLocaleData(ruLocale, 'ru');
     FilterPipe,
     CreatePageComponent,
     EditPageComponent,
+    OptionsPageComponent,
   ],
   imports: [
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
     AppRoutingModule,
-    HttpClientModule,
+    // HttpClientModule,
     // The HttpClientInMemoryWebApiModule module intercepts HTTP requests
     // and returns simulated server responses.
     // Remove it when a real server is ready to receive requests.
-    HttpClientInMemoryWebApiModule.forRoot(
-      InMemoryDataService, { dataEncapsulation: false }
-    ),
+    // HttpClientInMemoryWebApiModule.forRoot(
+    //   InMemoryDataService, { dataEncapsulation: false }
+    // ),
     FontAwesomeModule,
+    NgxIndexedDBModule.forRoot(dbConfig),
   ],
   providers: [],
   bootstrap: [AppComponent]

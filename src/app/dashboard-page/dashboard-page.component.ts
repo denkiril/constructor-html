@@ -3,7 +3,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Subscription } from 'rxjs';
-import { faEdit, faTrashAlt, faFileExport } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faTrashAlt, faFileExport, faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
 
 import { Site } from '../shared/interfaces';
 import { SitesService } from '../shared/sites.service';
@@ -17,19 +17,20 @@ import { SitesService } from '../shared/sites.service';
 export class DashboardPageComponent implements OnInit, OnDestroy {
 
   sites: Site[] = [];
+  pSub: Subscription;
   gSub: Subscription;
-  sSub: Subscription;
   dSub: Subscription;
   form: FormGroup;
   searchStr = '';
   loading = true;
-  pageSize = 3;
+  pageSize = 5;
   pageIndex = 1;
   pageIndexMax = 1;
 
   faEdit = faEdit;
   faTrashAlt = faTrashAlt;
   faFileExport = faFileExport;
+  faExternalLinkAlt = faExternalLinkAlt;
 
   constructor(
     private sitesService: SitesService,
@@ -43,13 +44,18 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
       console.log('params: ', params);
       this.searchStr = params['s'];
 
-      this.sitesService.getSites(params['p'], this.pageSize, this.searchStr).subscribe(resp => {
-        console.log(resp);
-        this.sites = resp.sites;
-        this.pageIndex = resp.pageIndex;
-        this.pageIndexMax = Math.ceil(resp.sitesLen / this.pageSize);
+      this.pSub = this.sitesService.getPageSize().subscribe(pageSize => {
+        console.log('getPageSize:', pageSize);
+        if (pageSize) this.pageSize = Number(pageSize);
 
-        this.loading = false;
+        this.gSub = this.sitesService.getSites(params['p'], this.pageSize, this.searchStr).subscribe(resp => {
+          console.log(resp);
+          this.sites = resp.sites;
+          this.pageIndex = resp.pageIndex;
+          this.pageIndexMax = Math.ceil(resp.sitesLen / this.pageSize);
+  
+          this.loading = false;
+        });
       });
     })
 
@@ -110,9 +116,40 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
     }
   }
 
+  preview(site: Site): void {
+    console.log(site);
+    const newWindow = window.open('about:blank', '_blank');
+    // newWindow.document.write(site.body);
+    // newWindow.document.title = site.title;
+    newWindow.document.write(
+      `<script>
+        console.log('js test');
+        var getData = new Promise(function(resolve) {
+          var data = {
+            title: 'Test title 2',
+            body: '<h1>Hello Test!!</h1>',
+          };
+          resolve(data);
+        });
+
+        getData.then(function(data) {
+          document.title = data.title;
+          document.write(data.body);
+        });
+      </script>`
+    );
+    // const newWindow = window.open('about:blank', '_blank');
+    // newWindow.focus();
+    // newWindow.onload = function() {
+      // }
+    // const html = '<div style="font-size:30px">Добро пожаловать!</div>';
+    // newWindow.document.body.insertAdjacentHTML('afterbegin', site.body);
+    
+  }
+
   ngOnDestroy() {
+    if (this.pSub) this.pSub.unsubscribe();
     if (this.gSub) this.gSub.unsubscribe();
-    if (this.sSub) this.sSub.unsubscribe();
     if (this.dSub) this.dSub.unsubscribe();
   }
 

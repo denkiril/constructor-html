@@ -1,0 +1,21 @@
+<div *ngIf="form; else loadingTemplate">
+    <form [formGroup]="form" (ngSubmit)="submit()">
+        <h1>Настройки</h1>
+
+        <div class="form-control">
+            <label for="pageSize">Кол-во сайтов на странице (для пагинации):</label>
+            <input type="text" id="pageSize" formControlName="pageSize">
+        </div>
+
+        <button
+            type="submit"
+            class="btn btn-primary"
+            [disabled]="form.invalid || submitted">
+            Сохранить настройки
+        </button>
+    </form>
+</div>
+
+<ng-template #loadingTemplate>
+    <p class="text-center">Настройки загружаются...</p>
+</ng-template>
