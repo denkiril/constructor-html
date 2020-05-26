@@ -1,3 +1,7 @@
+<app-navbar></app-navbar>
+
+<div class="container">
+
 <div *ngIf="form; else loadingTemplate">
     <form [formGroup]="form" (ngSubmit)="submit()">
         <h1>Редактирование сайта</h1>
@@ -47,3 +51,5 @@
 <ng-template #loadingTemplate>
     <p class="text-center">Сайт загружается...</p>
 </ng-template>
+
+</div>

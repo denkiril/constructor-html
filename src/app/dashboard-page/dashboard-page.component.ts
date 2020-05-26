@@ -1,9 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute, Params } from '@angular/router';
-import { DomSanitizer } from '@angular/platform-browser';
+// import { DomSanitizer } from '@angular/platform-browser';
 import { Subscription } from 'rxjs';
-import { faEdit, faTrashAlt, faFileExport, faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faTrashAlt, faFileExport, faExternalLinkAlt, faShekelSign } from '@fortawesome/free-solid-svg-icons';
 
 import { Site } from '../shared/interfaces';
 import { SitesService } from '../shared/sites.service';
@@ -26,6 +26,7 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
   pageSize = 5;
   pageIndex = 1;
   pageIndexMax = 1;
+  sitesLen: number;
 
   faEdit = faEdit;
   faTrashAlt = faTrashAlt;
@@ -36,28 +37,33 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
     private sitesService: SitesService,
     private router: Router,
     private route: ActivatedRoute,
-    private sanitizer: DomSanitizer
+    // private sanitizer: DomSanitizer
   ) { }
 
-  ngOnInit(): void {
+  private loadSites(): void {
     this.route.queryParams.subscribe((params: Params) => {
       console.log('params: ', params);
       this.searchStr = params['s'];
-
+  
       this.pSub = this.sitesService.getPageSize().subscribe(pageSize => {
         console.log('getPageSize:', pageSize);
         if (pageSize) this.pageSize = Number(pageSize);
-
+  
         this.gSub = this.sitesService.getSites(params['p'], this.pageSize, this.searchStr).subscribe(resp => {
           console.log(resp);
           this.sites = resp.sites;
           this.pageIndex = resp.pageIndex;
-          this.pageIndexMax = Math.ceil(resp.sitesLen / this.pageSize);
+          this.sitesLen = resp.sitesLen;
+          this.pageIndexMax = Math.ceil(this.sitesLen / this.pageSize);
   
           this.loading = false;
         });
       });
     })
+  }
+
+  ngOnInit(): void {
+    this.loadSites();
 
     this.form = new FormGroup({
       search: new FormControl(null, Validators.required),
@@ -78,20 +84,22 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
   }
 
   remove(id: number) {
-    this.dSub = this.sitesService.delete(id).subscribe(() => {
+    this.dSub = this.sitesService.delete(id).subscribe(deleted => {
       this.sites = this.sites.filter(site => site.id !== id);
+      // this.loadSites();
+      if (deleted) this.sitesLen--;
     })
   }
 
-  generateJsonUrl(site: Site) {
-    // Create a blob of the data
-    const blob = new Blob([JSON.stringify(site)], {
-      type: 'application/json'
-    });
+  // generateJsonUrl(site: Site) {
+  //   // Create a blob of the data
+  //   const blob = new Blob([JSON.stringify(site)], {
+  //     type: 'application/json'
+  //   });
 
-    // return this.sanitizer.bypassSecurityTrustUrl('data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(site)));
-    return this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(blob));
-  }
+  //   // return this.sanitizer.bypassSecurityTrustUrl('data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(site)));
+  //   return this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(blob));
+  // }
 
   downloadJson(site: Site): void {
     const fileName = 'site.json';
@@ -126,10 +134,34 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
         console.log('js test');
         var getData = new Promise(function(resolve) {
           var data = {
-            title: 'Test title 2',
-            body: '<h1>Hello Test!!</h1>',
+            title: 'Error. Site not found.',
+            body: '<h1>Error. Site not found.</h1>',
           };
-          resolve(data);
+          var openRequest = indexedDB.open("chdb", 1);
+          openRequest.onsuccess = function() {
+            console.log('openRequest.onsuccess');
+            var db = this.result;
+            var transaction = db.transaction('sites', 'readonly');
+            var sites = transaction.objectStore('sites');
+            var request = sites.get(${site.id});
+            request.onsuccess = function() {
+              var site = this.result;
+              console.log('request.onsuccess:', site);
+              if (site) data = {
+                title: site.title,
+                body: site.body,
+              };
+              resolve(data);
+            }
+            request.onerror = function() {
+              console.error("request.onerror", this.error);
+              resolve(data);
+            };
+          }
+          openRequest.onerror = function() {
+            console.error("openRequest.onerror", this.error);
+            resolve(data);
+          };
         });
 
         getData.then(function(data) {

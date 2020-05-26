@@ -6,6 +6,10 @@
     color: var(--danger-color);
 }
 
+.accent {
+    color: var(--active-color);
+}
+
 .search-block {
     display: flex;
     margin-bottom: 1rem;
@@ -27,6 +31,17 @@
 
 table {
     margin-bottom: 2rem;
+}
+
+th.controls {
+    min-width: 180px;
+}
+
+td.site-body {
+    max-width: 250px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .flex {

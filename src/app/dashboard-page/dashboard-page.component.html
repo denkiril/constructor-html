@@ -1,83 +1,94 @@
+<app-navbar [sitesLen]="sitesLen" [auto]="false"></app-navbar>
+
+<div class="container">
+
 <div *ngIf="!loading; else loadingTemplate">
-    <form [formGroup]="form" (ngSubmit)="submit()">
-        <div class="search-block">
-            <input type="search" placeholder="Найти сайт..." formControlName="search" />
-            <button type="submit" class="btn btn-block btn-dark" [disabled]="form.invalid">Искать</button>
+    <div *ngIf="sitesLen; else nositesTemplate">
+        <form [formGroup]="form" (ngSubmit)="submit()">
+            <div class="search-block">
+                <input type="search" placeholder="Найти сайт..." formControlName="search" />
+                <button type="submit" class="btn btn-block btn-dark" [disabled]="form.invalid">Искать</button>
+            </div>
+        </form>
+
+        <div *ngIf="searchStr">
+            <h2>
+                <ng-container *ngIf="sites.length; else noResults">
+                    Результаты поиска "{{searchStr}}"
+                </ng-container>
+                <ng-template #noResults>
+                    Поиск "{{searchStr}}" не дал результатов.
+                </ng-template>
+            </h2>
         </div>
-    </form>
 
-    <div *ngIf="searchStr">
-        <h2>
-            <ng-container *ngIf="sites.length; else noResults">
-                Результаты поиска "{{searchStr}}"
-            </ng-container>
-            <ng-template #noResults>
-                Поиск "{{searchStr}}" не дал результатов.
-            </ng-template>
-        </h2>
-    </div>
+        <table *ngIf="sites.length">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Название</th>
+                    <th>Описание</th>
+                    <th>Текст (body)</th>
+                    <th>Дата создания</th>
+                    <th>Дата изменения</th>
+                    <th class="controls">Действия</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let site of sites | filterSites:form.get('search').value; let idx = index">
+                    <td>{{idx + 1}}</td>
+                    <td>{{site.title}}</td>
+                    <td>{{site.siteDescription}}</td>
+                    <td class="site-body">{{site.body}}</td>
+                    <td>{{site.createDate | date:'medium':null:'ru'}}</td>
+                    <td>{{site.updateDate | date:'medium':null:'ru'}}</td>
+                    <td>
+                        <button 
+                            class="btn btn-link"
+                            title="Редактировать"
+                            [routerLink]="['/site', site.id, 'edit']">
+                            <fa-icon [icon]="faEdit"></fa-icon>
+                        </button>
+                        <button (click)="remove(site.id)" class="btn btn-link hover-danger" title="Удалить">
+                            <fa-icon [icon]="faTrashAlt"></fa-icon>
+                        </button>
+                        <button
+                            (click)="downloadJson(site)"
+                            class="btn btn-link" title="Экспортировать">
+                            <fa-icon [icon]="faFileExport"></fa-icon>
+                        </button>
+                        <button (click)="preview(site)" class="btn btn-link" title="Предпросмотр 1">
+                            <fa-icon [icon]="faExternalLinkAlt"></fa-icon>
+                        </button>
+                        <a 
+                            class="btn btn-link accent" title="Предпросмотр 2" target="_blank"
+                            [routerLink]="['/preview']" [queryParams]="{id: site.id}"> 
+                            <fa-icon [icon]="faExternalLinkAlt"></fa-icon>
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
 
-    <table *ngIf="sites.length">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Название</th>
-                <th>Описание</th>
-                <th>Текст (body)</th>
-                <th>Дата создания</th>
-                <th>Дата изменения</th>
-                <th>Действия</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let site of sites | filterSites:form.get('search').value; let idx = index">
-                <td>{{idx + 1}}</td>
-                <td>{{site.title}}</td>
-                <td>{{site.siteDescription}}</td>
-                <td>{{site.body}}</td>
-                <td>{{site.createDate | date:'medium':null:'ru'}}</td>
-                <td>{{site.updateDate | date:'medium':null:'ru'}}</td>
-                <td>
-                    <button 
-                        class="btn btn-link"
-                        title="Редактировать"
-                        [routerLink]="['/site', site.id, 'edit']">
-                        <fa-icon [icon]="faEdit"></fa-icon>
-                    </button>
-                    <button (click)="remove(site.id)" class="btn btn-link hover-danger" title="Удалить">
-                        <fa-icon [icon]="faTrashAlt"></fa-icon>
-                    </button>
-                    <button
-                        (click)="downloadJson(site)"
-                        class="btn btn-link" title="Экспортировать">
-                        <fa-icon [icon]="faFileExport"></fa-icon>
-                    </button>
-                    <button (click)="preview(site)" class="btn btn-link" title="Предпросмотр">
-                        <fa-icon [icon]="faExternalLinkAlt"></fa-icon>
-                    </button>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-
-    <div *ngIf="pageIndex > 1 || pageIndex < pageIndexMax" class="flex">
-        <div class="pagination">
-            <a 
-                *ngIf="pageIndex > 1" 
-                [routerLink]="[]" [queryParams]="{s: searchStr, p: (pageIndex - 1 > 1 ? pageIndex - 1 : null)}"
-                class="prev page-numbers">&lt;&lt;</a>
-            <a *ngIf="pageIndex > 1" class="page-numbers" [routerLink]="[]">1</a>
-            <span *ngIf="pageIndex - 1 > 1" class="page-numbers dots">…</span>
-            <span class="page-numbers current">{{pageIndex}}</span>
-            <span *ngIf="pageIndex + 1 < pageIndexMax" class="page-numbers dots">…</span>
-            <a 
-                *ngIf="pageIndex < pageIndexMax" 
-                [routerLink]="[]" [queryParams]="{s: searchStr, p: pageIndexMax}"
-                class="page-numbers">{{pageIndexMax}}</a>
-            <a 
-                *ngIf="pageIndex < pageIndexMax" 
-                [routerLink]="[]" [queryParams]="{s: searchStr, p: pageIndex + 1}"
-                class="next page-numbers">&gt;&gt;</a>
+        <div *ngIf="pageIndex > 1 || pageIndex < pageIndexMax" class="flex">
+            <div class="pagination">
+                <a 
+                    *ngIf="pageIndex > 1" 
+                    [routerLink]="[]" [queryParams]="{s: searchStr, p: (pageIndex - 1 > 1 ? pageIndex - 1 : null)}"
+                    class="prev page-numbers">&lt;&lt;</a>
+                <a *ngIf="pageIndex > 1" class="page-numbers" [routerLink]="[]">1</a>
+                <span *ngIf="pageIndex - 1 > 1" class="page-numbers dots">…</span>
+                <span class="page-numbers current">{{pageIndex}}</span>
+                <span *ngIf="pageIndex + 1 < pageIndexMax" class="page-numbers dots">…</span>
+                <a 
+                    *ngIf="pageIndex < pageIndexMax" 
+                    [routerLink]="[]" [queryParams]="{s: searchStr, p: pageIndexMax}"
+                    class="page-numbers">{{pageIndexMax}}</a>
+                <a 
+                    *ngIf="pageIndex < pageIndexMax" 
+                    [routerLink]="[]" [queryParams]="{s: searchStr, p: pageIndex + 1}"
+                    class="next page-numbers">&gt;&gt;</a>
+            </div>
         </div>
     </div>
 </div>
@@ -85,3 +96,11 @@
 <ng-template #loadingTemplate>
     <p class="text-center">Идёт загрузка...</p>
 </ng-template>
+
+<ng-template #nositesTemplate>
+    <p class="text-center">
+        Сайтов в базе данных сейчас нет. Вы можете <a [routerLink]="['/create']" title="Создать сайт">создать</a> несколько.
+    </p>
+</ng-template>
+
+</div>

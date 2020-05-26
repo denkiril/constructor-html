@@ -280,6 +280,7 @@ table th {
     display: flex;
   }
 
+  li.active,
   li.active a {
     color: var(--active-color);
     font-weight: bold;

@@ -5,6 +5,7 @@ import { DashboardPageComponent } from './dashboard-page/dashboard-page.componen
 import { CreatePageComponent } from './create-page/create-page.component';
 import { EditPageComponent } from './edit-page/edit-page.component';
 import { OptionsPageComponent } from './options-page/options-page.component';
+import { PreviewPageComponent } from './preview-page/preview-page.component';
 
 
 const routes: Routes = [
@@ -13,6 +14,7 @@ const routes: Routes = [
   { path: 'create', component: CreatePageComponent },
   { path: 'options', component: OptionsPageComponent },
   { path: 'site/:id/edit', component: EditPageComponent },
+  { path: 'preview', component: PreviewPageComponent },
 ]
 
 @NgModule({

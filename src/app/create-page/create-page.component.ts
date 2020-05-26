@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 import { Site } from '../shared/interfaces';
 import { SitesService } from '../shared/sites.service';
+import { NavbarComponent } from '../navbar/navbar.component';
 
 @Component({
   selector: 'app-create-page',
@@ -13,6 +14,8 @@ export class CreatePageComponent implements OnInit {
 
   form: FormGroup;
   createDate: Date;
+
+  @ViewChild('navbar') private navbarComponent: NavbarComponent;
 
   constructor(
     private sitesService: SitesService
@@ -40,7 +43,7 @@ export class CreatePageComponent implements OnInit {
 
     this.sitesService.addSite(newSite as Site).subscribe(site => {
       this.form.reset();
-      console.log(site);
+      this.navbarComponent.increaseSitesLen();
       // this.sites.push(site);
       // this.alert.success('Пост успешно создан.');
     })

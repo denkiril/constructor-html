@@ -17,6 +17,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { CreatePageComponent } from './create-page/create-page.component';
 import { EditPageComponent } from './edit-page/edit-page.component';
 import { OptionsPageComponent } from './options-page/options-page.component';
+import { PreviewPageComponent } from './preview-page/preview-page.component';
+import { NavbarComponent } from './navbar/navbar.component';
 
 registerLocaleData(ruLocale, 'ru');
 
@@ -45,6 +47,8 @@ const dbConfig: DBConfig = {
     CreatePageComponent,
     EditPageComponent,
     OptionsPageComponent,
+    PreviewPageComponent,
+    NavbarComponent,
   ],
   imports: [
     BrowserModule,

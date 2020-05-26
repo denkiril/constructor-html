@@ -1,3 +1,7 @@
+<app-navbar #navbar></app-navbar>
+
+<div class="container">
+
 <form [formGroup]="form" (ngSubmit)="submit()">
     <h1>Создание нового сайта</h1>
 
@@ -45,3 +49,5 @@
 
 <input type="file" id="upload-input" accept="application/JSON" (change)="handleFile($event.target.files)" /> 
 <label class="upload-btn" for="upload-input">Импортировать из файла (json)</label>
+
+</div>

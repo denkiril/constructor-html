@@ -1,3 +1,7 @@
+<app-navbar></app-navbar>
+
+<div class="container">
+
 <div *ngIf="form; else loadingTemplate">
     <form [formGroup]="form" (ngSubmit)="submit()">
         <h1>Настройки</h1>
@@ -19,3 +23,5 @@
 <ng-template #loadingTemplate>
     <p class="text-center">Настройки загружаются...</p>
 </ng-template>
+
+</div>

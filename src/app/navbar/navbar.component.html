@@ -1,0 +1,14 @@
+<nav class="navbar bg-primary">
+    <h1>
+        <a routerLink="/">Constructor HTML</a>
+    </h1>
+
+    <ul>
+        <li routerLinkActive="active" class="rel">
+            <a [routerLink]="['/dashboard']">Список сайтов</a>
+            <span class="abs-num">{{sitesLen}}</span>
+        </li>
+        <li routerLinkActive="active"><a [routerLink]="['/create']">Создать сайт</a></li>
+        <li routerLinkActive="active"><a [routerLink]="['/options']">Настройки</a></li>
+    </ul>
+</nav>

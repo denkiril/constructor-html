@@ -114,18 +114,18 @@ export class SitesService {
     });
   }
 
-  /** DELETE: delete the site from the server */
-  delete(site: Site | number): Observable<Site> {
+  /** DELETE: delete the site from the server. Return true (deleted) or false. */
+  delete(site: Site | number): Observable<boolean> {
     const id = typeof site === 'number' ? site : site.id;
     return new Observable(subscriber => {
       this.dbService.delete('sites', id).then(
         () => {
           console.log(`deleted site id=${id}`);
-          subscriber.next();
+          subscriber.next(true);
         },
         error => {
           console.log(error);
-          subscriber.next();
+          subscriber.next(false);
         }
       );
     });
