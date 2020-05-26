@@ -1,4 +1,4 @@
-<app-navbar [sitesLen]="sitesLen" [auto]="false"></app-navbar>
+<app-navbar #navbar [auto]="false"></app-navbar>
 
 <div class="container">
 
@@ -61,7 +61,7 @@
                             <fa-icon [icon]="faExternalLinkAlt"></fa-icon>
                         </button>
                         <a 
-                            class="btn btn-link accent" title="Предпросмотр 2" target="_blank"
+                            class="btn btn-link text-active" title="Предпросмотр 2" target="_blank"
                             [routerLink]="['/preview']" [queryParams]="{id: site.id}"> 
                             <fa-icon [icon]="faExternalLinkAlt"></fa-icon>
                         </a>

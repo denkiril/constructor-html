@@ -30,7 +30,7 @@ export class EditPageComponent implements OnInit, OnDestroy {
         return this.sitesService.getById(params['id']);
       })
     ).subscribe((site: Site) => {
-      console.log(site);
+      // console.log(site);
       this.site = site;
       this.form = new FormGroup({
         title: new FormControl(site.title, Validators.required),
@@ -55,8 +55,6 @@ export class EditPageComponent implements OnInit, OnDestroy {
 
     this.uSub = this.sitesService.update(this.site).subscribe(() => {
       this.submitted = false;
-      console.log('after update:', this.site);
-      //   this.alert.success('Пост обновлён.');
     })
   }
 

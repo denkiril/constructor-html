@@ -39,7 +39,7 @@ export class CreatePageComponent implements OnInit {
       createDate: this.createDate || new Date(),
     }
 
-    console.log(newSite);
+    // console.log(newSite);
 
     this.sitesService.addSite(newSite as Site).subscribe(site => {
       this.form.reset();
@@ -53,7 +53,7 @@ export class CreatePageComponent implements OnInit {
     const file = files.item(0);
 
     file.text().then(text => {
-      console.log('handleFile', text);
+      // console.log('handleFile', text);
       const uploaded = JSON.parse(text);
 
       if(uploaded.title) this.form.get('title').setValue(uploaded.title);

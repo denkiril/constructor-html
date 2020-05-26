@@ -10,9 +10,10 @@ import { SitesService } from '../shared/sites.service';
 })
 export class NavbarComponent implements OnInit, OnDestroy {
 
-  @Input() sitesLen: number;
   @Input() auto = true;
   gSub: Subscription;
+  sitesLen: number;
+  sitesLenVisible = false;
 
   constructor(
     private sitesService: SitesService,
@@ -23,10 +24,17 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   updateSitesLen(): void {
-    console.log('NAVBAR updateSitesLen');
+    // console.log('NAVBAR updateSitesLen');
     this.gSub = this.sitesService.getSites().subscribe(resp => {
       this.sitesLen = resp.sitesLen;
+      this.sitesLenVisible = true;
     });
+  }
+
+  setSitesLen(sitesLen: number): void {
+    // console.log('NAVBAR setSitesLen');
+    this.sitesLen = sitesLen;
+    this.sitesLenVisible = true;
   }
 
   increaseSitesLen(): void {

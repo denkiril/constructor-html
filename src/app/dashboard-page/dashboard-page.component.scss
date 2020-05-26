@@ -2,14 +2,6 @@
     margin-left: 10px;
 }
 
-.hover-danger:hover {
-    color: var(--danger-color);
-}
-
-.accent {
-    color: var(--active-color);
-}
-
 .search-block {
     display: flex;
     margin-bottom: 1rem;
@@ -30,7 +22,15 @@
 }
 
 table {
+    width: 100%;
+    border-collapse: collapse;
     margin-bottom: 2rem;
+}
+  
+table th,
+table td {
+    padding: 1rem;
+    text-align: left;
 }
 
 th.controls {

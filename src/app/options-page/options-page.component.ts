@@ -35,13 +35,12 @@ export class OptionsPageComponent implements OnInit, OnDestroy {
     if (this.form.invalid) return;
 
     this.submitted = true;
-    console.log('submit', this.form.value);
+    // console.log('submit', this.form.value);
 
     const pageSize = this.form.value.pageSize;
     if (pageSize) {
       this.sSub = this.sitesService.setPageSize(pageSize).subscribe(() => {
         this.submitted = false;
-        console.log('after pageSize update');
       });
     }
   }

@@ -13,28 +13,9 @@ import { Site, SitesResponse } from './interfaces';
 })
 export class SitesService {
 
-  private init(): void {
-    console.log('sites.service init');
-    const site = {
-      title: 'Title idb-1',
-      body: '<h2>Hello from IDB!</h2>',
-      createDate: new Date(),
-    };
-    this.dbService.add('sites', site).then(
-      () => {
-        console.log('add init site in IDB:', site);
-      },
-      error => {
-        console.error('add init site error', error);
-      }
-    );
-  }
-
   constructor(
     private dbService: NgxIndexedDBService
-  ) {
-    // this.init();
-  }
+  ) { }
 
   /** GET sites from the server, with search and pagination */
   getSites(pageParam = '', pageSize = 0, searchTerm = ''): Observable<SitesResponse | null> {
@@ -48,7 +29,7 @@ export class SitesService {
           const pageIndex = (sites.length > pageSize && Number(pageParam)) ? Number(pageParam) : 1;
           const start = (pageIndex - 1) * pageSize;
           const sitesArr = pageSize ? sites.slice(start, start + pageSize) : sites;
-          console.log(`getSites: pageIndex=${pageIndex}, start=${start}, end=${start + pageSize}`);
+          // console.log(`getSites: pageIndex=${pageIndex}, start=${start}, end=${start + pageSize}`);
           subscriber.next({
             sites: sitesArr,
             sitesLen: sites.length,
@@ -124,7 +105,7 @@ export class SitesService {
           subscriber.next(true);
         },
         error => {
-          console.log(error);
+          console.error(error);
           subscriber.next(false);
         }
       );
@@ -136,7 +117,7 @@ export class SitesService {
     return new Observable(subscriber => {
       this.dbService.getByKey('options', 'pageSize').then(
         pageSize => {
-          console.log('pageSize from IDB:', pageSize);
+          // console.log('pageSize from IDB:', pageSize);
           const value = pageSize ? Number(pageSize.value) : 0;
           subscriber.next(value);
         },
@@ -153,7 +134,7 @@ export class SitesService {
     return new Observable(subscriber => {
       this.dbService.update('options', {id: 'pageSize', value: pageSize}).then(
         () => {
-          console.log('update pageSize in IDB:', pageSize);
+          // console.log('update pageSize in IDB:', pageSize);
           subscriber.next();
         },
         error => {

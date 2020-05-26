@@ -1,10 +1,59 @@
-.rel {
-    position: relative;
-}
+@import "../../assets/styles/vars.scss";
 
-.abs-num {
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.7rem 2rem;
+  z-index: 1;
+  width: 100%;
+  opacity: 0.9;
+  margin-bottom: 1rem;
+
+//   &.main {
+//     justify-content: center;
+//     border-bottom: 1px solid var(--dark-color);
+//   }
+
+  ul {
+    display: flex;
+  }
+
+  li {
+    padding: 0.45rem;
+    margin: 0 0.25rem;
+  }
+
+  li.active,
+  li.active a {
+    // color: var(--active-color);
+    color: $active-color;
+    font-weight: bold;
+    // cursor: default;
+  }
+
+  a {
+    color: #fff;
+
+    &:hover {
+    //   color: var(--light-color);
+        color: $light-color;
+    }
+  }
+
+  .abs-num {
     font-size: 0.8em;
-    position: absolute;
+    position: relative;
+    min-width: 1em;
     right: 0;
-    top: -2px;
+    top: -1em;
+    text-align: right;
+    display: inline-block;
+    transition: opacity 0.5s;
+    opacity: 0;
+  }
+
+  .visible {
+    opacity: 1;
+  }
 }

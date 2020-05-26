@@ -1,12 +1,13 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 // import { DomSanitizer } from '@angular/platform-browser';
 import { Subscription } from 'rxjs';
-import { faEdit, faTrashAlt, faFileExport, faExternalLinkAlt, faShekelSign } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faTrashAlt, faFileExport, faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
 
 import { Site } from '../shared/interfaces';
 import { SitesService } from '../shared/sites.service';
+import { NavbarComponent } from '../navbar/navbar.component';
 
 
 @Component({
@@ -33,6 +34,8 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
   faFileExport = faFileExport;
   faExternalLinkAlt = faExternalLinkAlt;
 
+  @ViewChild('navbar') private navbarComponent: NavbarComponent;
+
   constructor(
     private sitesService: SitesService,
     private router: Router,
@@ -42,20 +45,21 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
 
   private loadSites(): void {
     this.route.queryParams.subscribe((params: Params) => {
-      console.log('params: ', params);
+      // console.log('params: ', params);
       this.searchStr = params['s'];
   
       this.pSub = this.sitesService.getPageSize().subscribe(pageSize => {
-        console.log('getPageSize:', pageSize);
+        // console.log('getPageSize:', pageSize);
         if (pageSize) this.pageSize = Number(pageSize);
   
         this.gSub = this.sitesService.getSites(params['p'], this.pageSize, this.searchStr).subscribe(resp => {
-          console.log(resp);
+          // console.log(resp);
           this.sites = resp.sites;
           this.pageIndex = resp.pageIndex;
           this.sitesLen = resp.sitesLen;
           this.pageIndexMax = Math.ceil(this.sitesLen / this.pageSize);
-  
+
+          this.navbarComponent.setSitesLen(this.sitesLen);
           this.loading = false;
         });
       });
@@ -87,7 +91,10 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
     this.dSub = this.sitesService.delete(id).subscribe(deleted => {
       this.sites = this.sites.filter(site => site.id !== id);
       // this.loadSites();
-      if (deleted) this.sitesLen--;
+      if (deleted) {
+        this.sitesLen--;
+        this.navbarComponent.setSitesLen(this.sitesLen);
+      }
     })
   }
 
@@ -125,13 +132,12 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
   }
 
   preview(site: Site): void {
-    console.log(site);
+    // console.log(site);
     const newWindow = window.open('about:blank', '_blank');
     // newWindow.document.write(site.body);
     // newWindow.document.title = site.title;
     newWindow.document.write(
       `<script>
-        console.log('js test');
         var getData = new Promise(function(resolve) {
           var data = {
             title: 'Error. Site not found.',
@@ -139,14 +145,12 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
           };
           var openRequest = indexedDB.open("chdb", 1);
           openRequest.onsuccess = function() {
-            console.log('openRequest.onsuccess');
             var db = this.result;
             var transaction = db.transaction('sites', 'readonly');
             var sites = transaction.objectStore('sites');
             var request = sites.get(${site.id});
             request.onsuccess = function() {
               var site = this.result;
-              console.log('request.onsuccess:', site);
               if (site) data = {
                 title: site.title,
                 body: site.body,

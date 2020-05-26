@@ -4,9 +4,9 @@
     </h1>
 
     <ul>
-        <li routerLinkActive="active" class="rel">
+        <li routerLinkActive="active">
             <a [routerLink]="['/dashboard']">Список сайтов</a>
-            <span class="abs-num">{{sitesLen}}</span>
+            <span class="abs-num" [class.visible]="sitesLenVisible">{{sitesLen}}</span>
         </li>
         <li routerLinkActive="active"><a [routerLink]="['/create']">Создать сайт</a></li>
         <li routerLinkActive="active"><a [routerLink]="['/options']">Настройки</a></li>
