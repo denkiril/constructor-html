@@ -12,3 +12,5 @@ export interface SitesResponse {
     sitesLen: number,
     pageIndex: number,
 }
+
+export const DEFAULT_PAGE_SIZE = 5;

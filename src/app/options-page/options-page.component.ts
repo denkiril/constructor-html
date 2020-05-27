@@ -1,8 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
 import { SitesService } from '../shared/sites.service';
+import { DEFAULT_PAGE_SIZE } from '../shared/interfaces';
 
 @Component({
   selector: 'app-options-page',
@@ -15,7 +16,7 @@ export class OptionsPageComponent implements OnInit, OnDestroy {
   submitted = false;
   gSub: Subscription;
   sSub: Subscription;
-  pageSize: number;
+  pageSize = DEFAULT_PAGE_SIZE;
 
   constructor(
     private sitesService: SitesService

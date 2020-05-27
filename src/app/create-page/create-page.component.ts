@@ -41,26 +41,29 @@ export class CreatePageComponent implements OnInit {
 
     // console.log(newSite);
 
-    this.sitesService.addSite(newSite as Site).subscribe(site => {
+    this.sitesService.addSite(newSite as Site).subscribe(() => {
       this.form.reset();
       this.navbarComponent.increaseSitesLen();
-      // this.sites.push(site);
-      // this.alert.success('Пост успешно создан.');
     })
   }
 
   handleFile(files: FileList): void {
     const file = files.item(0);
+    // console.log('handleFile', file);
+    // file.text().then(text => {});
 
-    file.text().then(text => {
-      // console.log('handleFile', text);
+    const reader = new FileReader();
+    reader.addEventListener('loadend', () => {
+      const text = reader.result.toString();
+      // console.log('reader.result:', text);
       const uploaded = JSON.parse(text);
 
-      if(uploaded.title) this.form.get('title').setValue(uploaded.title);
-      if(uploaded.siteDescription) this.form.get('siteDescription').setValue(uploaded.siteDescription);
-      if(uploaded.body) this.form.get('body').setValue(uploaded.body);
-      if(uploaded.createDate) this.createDate = new Date(uploaded.createDate);
+      if (uploaded.title !== undefined) this.form.get('title').setValue(uploaded.title);
+      if (uploaded.siteDescription !== undefined) this.form.get('siteDescription').setValue(uploaded.siteDescription);
+      if (uploaded.body !== undefined) this.form.get('body').setValue(uploaded.body);
+      if (uploaded.createDate) this.createDate = new Date(uploaded.createDate);
     });
+    reader.readAsText(file);
   }
 
 }

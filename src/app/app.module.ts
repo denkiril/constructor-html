@@ -5,10 +5,10 @@ import { registerLocaleData } from '@angular/common';
 import ruLocale from '@angular/common/locales/ru';
 // import { HttpClientModule }    from '@angular/common/http';
 
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 // import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
 // import { InMemoryDataService }  from './in-memory-data.service';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { NgxIndexedDBModule, DBConfig } from 'ngx-indexed-db';
+// import { NgxIndexedDBModule, DBConfig } from 'ngx-indexed-db';
 
 import { AppComponent } from './app.component';
 import { DashboardPageComponent } from './dashboard-page/dashboard-page.component';
@@ -22,22 +22,22 @@ import { NavbarComponent } from './navbar/navbar.component';
 
 registerLocaleData(ruLocale, 'ru');
 
-const dbConfig: DBConfig = {
-  name: 'chdb',
-  version: 1,
-  objectStoresMeta: [
-    {
-      store: 'sites',
-      storeConfig: { keyPath: 'id', autoIncrement: true },
-      storeSchema: [],
-    },
-    {
-      store: 'options',
-      storeConfig: { keyPath: 'id', autoIncrement: false },
-      storeSchema: [],
-    },
-  ]
-};
+// const dbConfig: DBConfig = {
+//   name: 'chdb',
+//   version: 1,
+//   objectStoresMeta: [
+//     {
+//       store: 'sites',
+//       storeConfig: { keyPath: 'id', autoIncrement: true },
+//       storeSchema: [],
+//     },
+//     {
+//       store: 'options',
+//       storeConfig: { keyPath: 'id', autoIncrement: false },
+//       storeSchema: [],
+//     },
+//   ]
+// };
 
 @NgModule({
   declarations: [
@@ -55,6 +55,7 @@ const dbConfig: DBConfig = {
     FormsModule,
     ReactiveFormsModule,
     AppRoutingModule,
+    FontAwesomeModule,
     // HttpClientModule,
     // The HttpClientInMemoryWebApiModule module intercepts HTTP requests
     // and returns simulated server responses.
@@ -62,8 +63,7 @@ const dbConfig: DBConfig = {
     // HttpClientInMemoryWebApiModule.forRoot(
     //   InMemoryDataService, { dataEncapsulation: false }
     // ),
-    FontAwesomeModule,
-    NgxIndexedDBModule.forRoot(dbConfig),
+    // NgxIndexedDBModule.forRoot(dbConfig),
   ],
   providers: [],
   bootstrap: [AppComponent]

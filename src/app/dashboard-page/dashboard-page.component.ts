@@ -5,7 +5,7 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { faEdit, faTrashAlt, faFileExport, faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
 
-import { Site } from '../shared/interfaces';
+import { Site, DEFAULT_PAGE_SIZE } from '../shared/interfaces';
 import { SitesService } from '../shared/sites.service';
 import { NavbarComponent } from '../navbar/navbar.component';
 
@@ -24,7 +24,7 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
   form: FormGroup;
   searchStr = '';
   loading = true;
-  pageSize = 5;
+  pageSize = DEFAULT_PAGE_SIZE;
   pageIndex = 1;
   pageIndexMax = 1;
   sitesLen: number;
@@ -59,7 +59,7 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
           this.sitesLen = resp.sitesLen;
           this.pageIndexMax = Math.ceil(this.sitesLen / this.pageSize);
 
-          this.navbarComponent.setSitesLen(this.sitesLen);
+          // this.navbarComponent.setSitesLen(this.sitesLen);
           this.loading = false;
         });
       });
@@ -93,7 +93,7 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
       // this.loadSites();
       if (deleted) {
         this.sitesLen--;
-        this.navbarComponent.setSitesLen(this.sitesLen);
+        this.navbarComponent.decreaseSitesLen();
       }
     })
   }

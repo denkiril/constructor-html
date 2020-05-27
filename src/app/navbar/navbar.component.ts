@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { SitesService } from '../shared/sites.service';
@@ -10,35 +10,39 @@ import { SitesService } from '../shared/sites.service';
 })
 export class NavbarComponent implements OnInit, OnDestroy {
 
-  @Input() auto = true;
+  // @Input() auto = true;
   gSub: Subscription;
   sitesLen: number;
-  sitesLenVisible = false;
+  sitesLenVisible = true;
 
   constructor(
     private sitesService: SitesService,
   ) { }
 
   ngOnInit(): void {
-    if (this.auto) this.updateSitesLen();
+    this.updateSitesLen();
   }
 
   updateSitesLen(): void {
-    // console.log('NAVBAR updateSitesLen');
-    this.gSub = this.sitesService.getSites().subscribe(resp => {
-      this.sitesLen = resp.sitesLen;
+    this.gSub = this.sitesService.getSitesLen().subscribe(sitesLen => {
+      this.sitesLen = sitesLen;
       this.sitesLenVisible = true;
+      // console.log('NAVBAR updateSitesLen:', sitesLen);
     });
   }
 
-  setSitesLen(sitesLen: number): void {
-    // console.log('NAVBAR setSitesLen');
-    this.sitesLen = sitesLen;
-    this.sitesLenVisible = true;
-  }
+  // setSitesLen(sitesLen: number): void {
+  //   // console.log('NAVBAR setSitesLen');
+  //   this.sitesLen = sitesLen;
+  //   this.sitesLenVisible = true;
+  // }
 
   increaseSitesLen(): void {
     this.sitesLen++;
+  }
+
+  decreaseSitesLen(): void {
+    this.sitesLen--;
   }
 
   ngOnDestroy() {

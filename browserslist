@@ -11,5 +11,5 @@ Firefox ESR
 not dead
 not IE 9 # For IE 9-11 support, remove 'not'.
 IE 10
-Chrome > 41
+Chrome 41
 safari > 9

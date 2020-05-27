@@ -1,5 +1,14 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto');
-@import "./assets/styles/vars.scss";
+@import "./vars.scss";
+
+// :root {
+//   --primary-color: #582d7c;
+//   --dark-color: #333333;
+//   --light-color: #f4f4f4;
+//   --danger-color: #dc3545;
+//   --success-color: #28a745;
+//   --active-color: #f7ab3b;
+// }
 
 * {
   box-sizing: border-box;
@@ -64,6 +73,11 @@ img {
 .text-active {
   // color: var(--active-color);
   color: $active-color !important;
+}
+
+.text-midlight {
+  // color: var(--light-color);
+  color: #888 !important;
 }
 
 .text-center {
